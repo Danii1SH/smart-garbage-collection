@@ -1,0 +1,49 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sgc
+    username: user
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  liquibase:
+    change-log: classpath:/migrations/changelog-master.xml
+    enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+app:
+  storage:
+    image-dir: uploads/images/
+
+jwt:
+  secret: g#C&bZ@3kTnV!qR*PxL9zFvAeHwM5UdQ
+  expiration: 3600000
+
+audit:
+  templates:
+    CREATE_USER: "Создан пользователь: ${request.fullName} (${request.username})"
+    UPDATE_USER: "Изменён пользователь: ${userId}"
+    DELETE_USER: "Удален пользователь: ${userId}"
+
+    CREATE_COMPANY: "Создана компания: ${request.name} ИНН: ${request.inn}"
+    UPDATE_COMPANY: "Изменена компаня: ${request.name} ИНН: ${request.inn}"
+    DELETE_COMPANY: "Удалена компания: ${request.name} ИНН: ${request.inn}"
+
+gigachat:
+  oauth-url: https://ngw.devices.sberbank.ru:9443/api/v2/oauth
+  api-url: https://gigachat.devices.sberbank.ru/api/v1/chat/completions
+  client-id: 10f56066-e25d-44f0-89e4-6d382735fd1d
+  auth-key: MTBmNTYwNjYtZTI1ZC00NGYwLTg5ZTQtNmQzODI3MzVmZDFkOmNhNDA2M2FjLTZhYTgtNGM1Ni1hNGRkLTQ3MmFhNWVmNTE4YQ==
+  scope: GIGACHAT_API_PERS

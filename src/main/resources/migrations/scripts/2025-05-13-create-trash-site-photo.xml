@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+<changeSet id="create-trash-site-photo" author="yourname">
+        <createTable tableName="trash_site_photo">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="trash_site_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ai_status" type="VARCHAR(50)"/>
+            <column name="uploaded_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="trash_site_photo"
+                baseColumnNames="trash_site_id"
+                constraintName="fk_trash_site_photo_trash_site"
+                referencedTableName="trash_sites"
+                referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

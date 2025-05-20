@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <changeSet id="005-create-companies-table" author="dev">
+        <createTable tableName="companies">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="006-add-company-to-users" author="dev">
+    <addColumn tableName="users">
+        <column name="company_id" type="UUID">
+            <constraints nullable="false"/>
+        </column>
+    </addColumn>
+    <addForeignKeyConstraint baseTableName="users"
+                             baseColumnNames="company_id"
+                             referencedTableName="companies"
+                             referencedColumnNames="id"
+                             constraintName="fk_users_company"/>
+    </changeSet>
+
+    <changeSet id="007-add-company-to-trash-sites" author="dev">
+    <addColumn tableName="trash_sites">
+        <column name="company_id" type="UUID">
+            <constraints nullable="false"/>
+        </column>
+    </addColumn>
+    <addForeignKeyConstraint baseTableName="trash_sites"
+                             baseColumnNames="company_id"
+                             referencedTableName="companies"
+                             referencedColumnNames="id"
+                             constraintName="fk_trash_sites_company"/>
+    </changeSet>
+</databaseChangeLog>

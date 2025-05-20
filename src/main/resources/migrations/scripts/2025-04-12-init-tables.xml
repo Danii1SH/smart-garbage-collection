@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <!-- Создание таблицы users -->
+    <changeSet id="001-create-users-table" author="dev">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы auth_users -->
+    <changeSet id="002-create-auth-users-table" author="dev">
+        <createTable tableName="auth_users">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+
+
+        <!-- Добавляем внешний ключ отдельно -->
+        <addForeignKeyConstraint baseTableName="auth_users"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_auth_users_users"
+                                 onDelete="CASCADE"/>
+
+        <!-- Добавляем индекс для ускорения запросов -->
+        <createIndex indexName="idx_auth_users_user_id" tableName="auth_users">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Ограничение на значения в role через SQL -->
+    <changeSet id="003-add-role-check-constraint" author="dev">
+        <sql>
+            ALTER TABLE auth_users ADD CONSTRAINT chk_auth_users_role CHECK (role IN ('ADMIN', 'USER', 'MANAGER'));
+        </sql>
+    </changeSet>
+
+    <!-- Создание таблицы "trash_sites" -->
+    <changeSet id="004-create-trash-sites-table" author="dev">
+        <createTable tableName="trash_sites">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="site_number" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="district" type="varchar(100)"/>
+            <column name="route_number" type="varchar(50)"/>
+            <column name="address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_name" type="varchar(255)"/>
+            <column name="container_count" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="double(9,6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double(9,6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

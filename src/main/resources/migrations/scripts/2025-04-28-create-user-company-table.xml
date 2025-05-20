@@ -1,0 +1,70 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <!-- 1. Удалить столбец ROLE из auth_users -->
+    <changeSet id="009-drop-role-from-auth_users" author="yourname">
+        <dropColumn tableName="auth_users" columnName="role"/>
+    </changeSet>
+
+    <!-- 2. Добавить поле role в таблицу users -->
+    <changeSet id="010-add-role-to-users" author="yourname">
+        <addColumn tableName="users">
+            <column name="role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- 3. Убрать company_id из users -->
+    <changeSet id="011-drop-company-id-from-users" author="yourname">
+        <dropColumn tableName="users" columnName="company_id"/>
+    </changeSet>
+
+    <!-- 4. Добавить поля о компании в companies -->
+    <changeSet id="012-add-company-fields-to-companies" author="yourname">
+        <addColumn tableName="companies">
+            <column name="description" type="TEXT"/>
+            <column name="website" type="VARCHAR(255)"/>
+            <column name="industry" type="VARCHAR(100)"/>
+            <column name="founded_year" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- 5. В users создать колонку позиция -->
+    <changeSet id="013-add-position-to-users" author="yourname">
+        <addColumn tableName="users">
+            <column name="position" type="VARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- 6. Создать ассоциативную таблицу user_company -->
+    <changeSet id="014-create-user-company-association" author="yourname">
+        <createTable tableName="user_company">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="user_company"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_company_user"/>
+
+        <addForeignKeyConstraint baseTableName="user_company"
+                                 baseColumnNames="company_id"
+                                 referencedTableName="companies"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_company_company"/>
+    </changeSet>
+
+</databaseChangeLog>

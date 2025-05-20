@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+    <include file="scripts/2025-04-12-init-tables.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/2025-04-16-update-users-and-trash-sites.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/2025-04-26-create-audit-logs-table.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/2025-04-28-create-user-company-table.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/2025-05-13-create-trash-site-photo.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>
