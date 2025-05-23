@@ -3,11 +3,13 @@ package com.example.smartgarbagecollection.controller;
 import com.example.smartgarbagecollection.dto.TrashSiteRequest;
 import com.example.smartgarbagecollection.dto.TrashSiteResponse;
 import com.example.smartgarbagecollection.enums.Role;
+import com.example.smartgarbagecollection.security.AccessValidator;
 import com.example.smartgarbagecollection.security.UserDetailsImpl;
 import com.example.smartgarbagecollection.service.TrashSiteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +21,11 @@ import java.util.UUID;
 @RequestMapping("/api/trash-sites")
 @Tag(name = "Мусорные площадки", description = "Управление мусорными площадками")
 @SecurityRequirement(name = "BearerAuth")
+@RequiredArgsConstructor
 public class TrashSiteController {
 
+    private final AccessValidator accessValidator;
     private final TrashSiteService service;
-
-    public TrashSiteController(TrashSiteService service) {
-        this.service = service;
-    }
 
 //    @PostMapping("/filter")
 //    @Operation(summary = "Фильтрация площадок (только для ADMIN)")
@@ -62,11 +62,9 @@ public class TrashSiteController {
     )
     public ResponseEntity<List<TrashSiteResponse>> getAllByCompany(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<TrashSiteResponse> trashSites;
-        if (userDetails.getRole() == Role.ADMIN) {
-            trashSites = service.getAll();
-        } else {
-            trashSites = service.getAllByCompany(userDetails.getCompanyId());
-        }
+        trashSites = accessValidator.isAdmin(userDetails)
+                ? service.getAll()
+                : service.getAllByCompany(userDetails.getCompanyId());
         return ResponseEntity.ok(trashSites);
     }
 

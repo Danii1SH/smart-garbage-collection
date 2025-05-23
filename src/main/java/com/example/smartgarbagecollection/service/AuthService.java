@@ -23,7 +23,7 @@ public class AuthService {
         if (userOptional.isPresent()) {
             AuthUser user = userOptional.get();
             if (passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-                UUID userId = user.getId();
+                UUID userId = user.getUser().getId();
                 String username = user.getUsername();
 
                 return jwtTokenProvider.generateToken(userId, username);

@@ -13,8 +13,5 @@ public interface UserService {
     UserDto getUserById(UUID userId, UserDetailsImpl currentUser);
     UserDto updateUser(UUID userId, UserRequest request, UserDetailsImpl currentUser);
     void deleteUser(UUID userId, UserDetailsImpl currentUser);
-    void checkAccessToModify(User targetUser, UserDetailsImpl currentUser);
-    void checkAccessToDelete(User targetUser, UserDetailsImpl currentUser);
-    UUID getCompanyIdOf(User user);
 
 }

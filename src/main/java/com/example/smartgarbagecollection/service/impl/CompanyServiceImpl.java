@@ -5,7 +5,9 @@ import com.example.smartgarbagecollection.dto.CompanyRequest;
 import com.example.smartgarbagecollection.dto.CompanyResponse;
 import com.example.smartgarbagecollection.model.Company;
 import com.example.smartgarbagecollection.repository.CompanyRepository;
+import com.example.smartgarbagecollection.repository.UserCompanyRepository;
 import com.example.smartgarbagecollection.service.CompanyService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository repository;
+    private final UserCompanyRepository userCompanyRepository;
 
     @Audit(action = "CREATE_COMPANY")
     @Override
@@ -55,6 +58,13 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void delete(UUID id) {
         repository.deleteById(id);
+    }
+
+    public UUID getCompanyIdByUserId(UUID userId) {
+        return userCompanyRepository.findByUserId(userId)
+                .map(userCompany -> userCompany.getCompany().getId())
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Компания для пользователя с ID " + userId + " не найдена"));
     }
 
     private CompanyResponse mapToResponse(Company company) {

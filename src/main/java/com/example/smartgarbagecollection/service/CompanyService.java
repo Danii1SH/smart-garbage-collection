@@ -12,4 +12,5 @@ public interface CompanyService {
     CompanyResponse getById(UUID id);
     CompanyResponse update(UUID id, CompanyRequest request);
     void delete(UUID id);
+    UUID getCompanyIdByUserId(UUID userId);
 }

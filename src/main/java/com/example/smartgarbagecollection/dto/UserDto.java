@@ -14,8 +14,9 @@ public class UserDto {
     private String email;
     private String position;
     private Role role;
+    private UUID companyId;
 
-    public static UserDto fromEntity(User user) {
+    public static UserDto fromEntity(User user, UUID companyId) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setFullName(user.getFullName());
@@ -23,6 +24,11 @@ public class UserDto {
         dto.setEmail(user.getEmail());
         dto.setPosition(user.getPosition());
         dto.setRole(user.getRole());
+        dto.setCompanyId(companyId);
         return dto;
+    }
+
+    public static UserDto fromEntity(User user) {
+        return fromEntity(user, null);
     }
 }

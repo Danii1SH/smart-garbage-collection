@@ -11,6 +11,7 @@ import com.example.smartgarbagecollection.repository.AuthUserRepository;
 import com.example.smartgarbagecollection.repository.CompanyRepository;
 import com.example.smartgarbagecollection.repository.UserCompanyRepository;
 import com.example.smartgarbagecollection.repository.UserRepository;
+import com.example.smartgarbagecollection.security.AccessValidator;
 import com.example.smartgarbagecollection.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,16 +29,18 @@ public class RegisterService {
     private final PasswordService passwordService;
     private final CompanyRepository companyRepository;
     private final UserCompanyRepository userCompanyRepository;
+    private final AccessValidator accessValidator;
 
     @Audit(action = "CREATE_USER")
     @Transactional
     public void registerUser(RegisterRequest request, UserDetailsImpl currentUser) {
         boolean isFirstUser = authUserRepository.count() == 0;
-        checkPermissions(request, currentUser, isFirstUser);
+
+        accessValidator.checkCanRegister(currentUser, request, isFirstUser);
 
         Company company = getCompanyById(request.getCompanyId());
 
-        User user = createUser(request, company);
+        User user = createUser(request);
         createAuthUser(request, user);
         createUserCompany(user, company);
     }
@@ -47,32 +50,7 @@ public class RegisterService {
                 .orElseThrow(() -> new IllegalArgumentException("Компания с ID " + companyId + " не найдена"));
     }
 
-    private void checkPermissions(RegisterRequest request, UserDetailsImpl currentUser, boolean isFirstUser) {
-        if (isFirstUser) return;
-
-        Role creatorRole = currentUser.getRole();
-        Role targetRole = request.getRole();
-
-        if (targetRole == Role.ADMIN && creatorRole != Role.ADMIN) {
-            throw new AccessDeniedException("Только ADMIN может создавать других ADMIN");
-        }
-
-        boolean allowed = switch (creatorRole) {
-            case ADMIN -> true;
-            case EDITOR -> targetRole == Role.VIEWER;
-            default -> false;
-        };
-
-        if (!allowed) {
-            throw new AccessDeniedException("Вам запрещено создавать пользователей с ролью: " + targetRole);
-        }
-
-        if (creatorRole == Role.EDITOR && !currentUser.getCompanyId().equals(request.getCompanyId())) {
-            throw new AccessDeniedException("Вы не можете регистрировать пользователей в другой компании");
-        }
-    }
-
-    private User createUser(RegisterRequest request, Company company) {
+    private User createUser(RegisterRequest request) {
         User user = new User();
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
