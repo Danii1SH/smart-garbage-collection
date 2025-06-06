@@ -76,8 +76,8 @@ public class AccessValidator {
 
         checkCanModifyUser(targetUser, currentUser);
     }
-
-    public void checkCanRegister(UserDetailsImpl currentUser, RegisterRequest request, boolean isFirstUser) {
+    //добавить
+    public static void checkCanRegister(UserDetailsImpl currentUser, RegisterRequest request, boolean isFirstUser) {
         if (isFirstUser) return;
 
         Role creatorRole = currentUser.getRole();

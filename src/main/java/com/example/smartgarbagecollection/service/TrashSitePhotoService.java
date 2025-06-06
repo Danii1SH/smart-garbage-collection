@@ -7,6 +7,5 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface TrashSitePhotoService {
-    void uploadAndAnalyzeDirectory(UUID trashSiteId, File imageFile)throws IOException;
-    void uploadAndAnalyze2(UUID trashSiteId, MultipartFile image) throws IOException;
+    void analyzeAndSavePhoto(UUID trashSiteId, String imageName);
 }

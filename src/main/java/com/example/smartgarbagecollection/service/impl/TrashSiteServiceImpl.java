@@ -46,6 +46,7 @@ public class TrashSiteServiceImpl implements TrashSiteService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+    //обединить два метода
 
     @Override
     public TrashSiteResponse getById(UUID id) {
@@ -74,7 +75,6 @@ public class TrashSiteServiceImpl implements TrashSiteService {
         res.setRegion(site.getRegion());
         res.setCity(site.getCity());
         res.setDistrict(site.getDistrict());
-        res.setRouteNumber(site.getRouteNumber());
         res.setAddress(site.getAddress());
         res.setContainerCount(site.getContainerCount());
         res.setStatus(site.getStatus());
@@ -96,7 +96,6 @@ public class TrashSiteServiceImpl implements TrashSiteService {
         site.setRegion(req.getRegion());
         site.setCity(req.getCity());
         site.setDistrict(req.getDistrict());
-        site.setRouteNumber(req.getRouteNumber());
         site.setAddress(req.getAddress());
         site.setContainerCount(req.getContainerCount());
         site.setStatus(req.getStatus());

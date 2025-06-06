@@ -5,8 +5,10 @@ import com.example.smartgarbagecollection.dto.UserRequest;
 import com.example.smartgarbagecollection.security.UserDetailsImpl;
 import com.example.smartgarbagecollection.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "BearerAuth")
+@PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
 @Tag(name = "Пользователи", description = "Управление пользователями")
 public class UserController {
 

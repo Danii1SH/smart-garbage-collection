@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 public interface StorageService {
-    String save(MultipartFile file) throws IOException;
-    String getRelativePath(File file);
-    File getFile(String relativePath);
+    String getFullPath(String imageName);
+    boolean exists(String imageName);
 }

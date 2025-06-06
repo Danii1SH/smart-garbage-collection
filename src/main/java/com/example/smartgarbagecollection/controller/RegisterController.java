@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "BearerAuth")
+@PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
 @Tag(name = "Аутентификация", description = "Эндпоинты для аутентификации пользователей и регистрации")
 public class RegisterController {
 
     private final RegisterService authService;
 
-    @SecurityRequirement(name = "BearerAuth")
     @PostMapping("/register")
-    @PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
     @Operation(
             summary = "Регистрация нового пользователя (админом)",
             description = "Регистрация пользователей доступна только для ADMIN и EDITOR. " +

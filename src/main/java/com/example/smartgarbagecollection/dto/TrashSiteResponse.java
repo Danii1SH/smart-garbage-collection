@@ -10,7 +10,6 @@ public class TrashSiteResponse {
     private String region;
     private String city;
     private String district;
-    private String routeNumber;
     private String address;
     private CompanyResponse company;
     private int containerCount;
