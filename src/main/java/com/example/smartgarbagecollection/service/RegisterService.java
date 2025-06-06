@@ -29,14 +29,13 @@ public class RegisterService {
     private final PasswordService passwordService;
     private final CompanyRepository companyRepository;
     private final UserCompanyRepository userCompanyRepository;
-    private final AccessValidator accessValidator;
 
     @Audit(action = "CREATE_USER")
     @Transactional
     public void registerUser(RegisterRequest request, UserDetailsImpl currentUser) {
         boolean isFirstUser = authUserRepository.count() == 0;
 
-        accessValidator.checkCanRegister(currentUser, request, isFirstUser);
+        AccessValidator.checkCanRegister(currentUser, request, isFirstUser);
 
         Company company = getCompanyById(request.getCompanyId());
 

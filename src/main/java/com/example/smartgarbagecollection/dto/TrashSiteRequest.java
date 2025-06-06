@@ -10,7 +10,6 @@ public class TrashSiteRequest {
     private String region;
     private String city;
     private String district;
-    private String routeNumber;
     private String address;
     private UUID companyId;
     private int containerCount;

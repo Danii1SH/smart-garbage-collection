@@ -9,6 +9,5 @@ import java.util.UUID;
 
 public interface TrashSiteRepository extends JpaRepository<TrashSite, UUID> {
     List<TrashSite> findAllByCompanyId(UUID companyId);
-
-    List<TrashSite> findAllByCompanyIdIn(List<UUID> companyIds);
+    //индекс повесить на companyId
 }

@@ -10,7 +10,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(22)
     }
 }
 
@@ -35,6 +35,9 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.76' // Bouncy Castle
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'chat.giga:gigachat-java:0.1.10'
+    implementation 'com.google.genai:google-genai:1.0.0'
 
 
     // JWT

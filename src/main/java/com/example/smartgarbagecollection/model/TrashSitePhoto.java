@@ -30,5 +30,4 @@ public class TrashSitePhoto {
 
     @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime uploadedAt = LocalDateTime.now();
-
 }

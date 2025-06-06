@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,29 +22,12 @@ import java.util.UUID;
 @RequestMapping("/api/trash-sites")
 @Tag(name = "Мусорные площадки", description = "Управление мусорными площадками")
 @SecurityRequirement(name = "BearerAuth")
+@PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
 @RequiredArgsConstructor
 public class TrashSiteController {
 
     private final AccessValidator accessValidator;
     private final TrashSiteService service;
-
-//    @PostMapping("/filter")
-//    @Operation(summary = "Фильтрация площадок (только для ADMIN)")
-//    public ResponseEntity<List<TrashSiteResponse>> getAllFiltered(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody(required = false) TrashSiteFilterRequest request
-//    ) {
-//        if (userDetails.getRole() != Role.ADMIN) {
-//            return ResponseEntity.status(403).build();
-//        }
-//
-//        TrashSiteFilter filter = new TrashSiteFilter(
-//                request != null ? request.getCompanyIds() : null
-//        );
-//
-//        List<TrashSiteResponse> trashSites = service.getAll(filter);
-//        return ResponseEntity.ok(trashSites);
-//    }
 
     @PostMapping
     @Operation(summary = "Создание мусорной площадки", description = "Создание новой мусорной площадки с данными из запроса")
